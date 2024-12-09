@@ -7,6 +7,8 @@ public interface TicketRepository {
 
   void delete(String ticketId);
 
+  void update(String ticketId);
+
   Ticket findById(String ticketId);
 
   List<Ticket> findAll(int page, int size);

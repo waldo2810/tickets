@@ -4,6 +4,7 @@ import com.wasabi.tickets.domain.Ticket;
 import com.wasabi.tickets.domain.TicketRepository;
 import com.wasabi.tickets.domain.TicketStatus;
 import com.wasabi.tickets.domain.exceptions.TicketNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,12 @@ public class JpaTicketAdapter implements TicketRepository {
   public void delete(String ticketId) {
     this.findById(ticketId);
     jpaTicketRepository.deleteById(ticketId);
+  }
+
+  @Override
+  public void update(String ticketId) {
+    this.findById(ticketId);
+    jpaTicketRepository.updateTicketStatus(ticketId, TicketStatus.CLOSED, LocalDateTime.now());
   }
 
   @Override
