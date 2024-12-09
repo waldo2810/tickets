@@ -1,5 +1,6 @@
 package com.wasabi.tickets.infrastructure.jpa;
 
+import com.wasabi.tickets.domain.PaginatedResponse;
 import com.wasabi.tickets.domain.Ticket;
 import com.wasabi.tickets.domain.TicketRepository;
 import com.wasabi.tickets.domain.TicketStatus;
@@ -7,7 +8,9 @@ import com.wasabi.tickets.domain.exceptions.TicketNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,15 +47,35 @@ public class JpaTicketAdapter implements TicketRepository {
   }
 
   @Override
-  public List<Ticket> findAll(int page, int size) {
-    return jpaTicketRepository.findAll().stream().map(this::toDomain).toList();
+  public PaginatedResponse<Ticket> findAll(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<JpaTicketEntity> ticketPage = jpaTicketRepository.findAll(pageable);
+
+    List<Ticket> tickets = ticketPage.stream().map(this::toDomain).toList();
+
+    return new PaginatedResponse<>(
+        tickets,
+        ticketPage.getTotalElements(),
+        ticketPage.getTotalPages(),
+        ticketPage.getNumber(),
+        ticketPage.getSize(),
+        ticketPage.hasNext());
   }
 
   @Override
-  public List<Ticket> findByStatus(TicketStatus status, int page, int size) {
-    return jpaTicketRepository.findByStatus(status, PageRequest.of(page, size)).stream()
-        .map(this::toDomain)
-        .toList();
+  public PaginatedResponse<Ticket> findByStatus(TicketStatus status, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<JpaTicketEntity> ticketPage = jpaTicketRepository.findByStatus(status, pageable);
+
+    List<Ticket> tickets = ticketPage.stream().map(this::toDomain).toList();
+
+    return new PaginatedResponse<>(
+        tickets,
+        ticketPage.getTotalElements(),
+        ticketPage.getTotalPages(),
+        ticketPage.getNumber(),
+        ticketPage.getSize(),
+        ticketPage.hasNext());
   }
 
   private JpaTicketEntity toJpaEntity(Ticket domain) {

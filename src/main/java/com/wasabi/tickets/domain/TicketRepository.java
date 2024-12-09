@@ -1,7 +1,5 @@
 package com.wasabi.tickets.domain;
 
-import java.util.List;
-
 public interface TicketRepository {
   void save(Ticket ticket);
 
@@ -11,7 +9,7 @@ public interface TicketRepository {
 
   Ticket findById(String ticketId);
 
-  List<Ticket> findAll(int page, int size);
+  PaginatedResponse<Ticket> findAll(int page, int size);
 
-  List<Ticket> findByStatus(TicketStatus status, int page, int size);
+  PaginatedResponse<Ticket> findByStatus(TicketStatus status, int page, int size);
 }

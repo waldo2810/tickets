@@ -4,10 +4,10 @@ import com.wasabi.tickets.application.CreateTicket;
 import com.wasabi.tickets.application.DeleteTicket;
 import com.wasabi.tickets.application.FindTicket;
 import com.wasabi.tickets.application.UpdateTicket;
+import com.wasabi.tickets.domain.PaginatedResponse;
 import com.wasabi.tickets.domain.Ticket;
 import com.wasabi.tickets.domain.TicketStatus;
 import java.util.HashMap;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +46,7 @@ public class TicketController {
   }
 
   @GetMapping
-  public List<Ticket> getAllTickets(
+  public PaginatedResponse<Ticket> getAllTickets(
       @RequestParam int page,
       @RequestParam int size,
       @RequestParam(required = false) TicketStatus status) {
