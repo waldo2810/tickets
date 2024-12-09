@@ -1,11 +1,13 @@
 package com.wasabi.tickets.domain.exceptions;
 
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.Getter;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such ticket")
-@AllArgsConstructor
+@Getter
 public class TicketNotFoundException extends RuntimeException {
-  private String ticketId;
+  private final String ticketId;
+
+  public TicketNotFoundException(String ticketId) {
+    super(String.format("Ticket with id %s was not found", ticketId));
+    this.ticketId = ticketId;
+  }
 }
